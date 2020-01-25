@@ -59,5 +59,74 @@ public class Q17_LetterCombinations {
     public static void main(String[] args) {
         List<String> output = new Q17_LetterCombinations().solve("23");
         System.out.println(Arrays.asList(output));
+
+        int[] nums = new int[4];
+        new Q17_LetterCombinations().permutations(nums, 0,4);
+
+        System.out.println("--");
+
+        String str = "0123";
+        new Q17_LetterCombinations().permutationCore(str.toCharArray(), 0, str.length()-1);
     }
+
+    /**
+     * 全排列
+     * @param nums 结果
+     * @param num 开始数字 [0, range-1]
+     * @param range 数字个数
+     */
+    private int[] flags = new int[4];
+    private void permutations(int[] nums, int num, int range) {
+        if (num >= range) {
+            for(int i=0; i<nums.length; i++) {
+                if (nums[0] == 0 && i == 0) {
+                    continue;
+                }
+                System.out.print(nums[i]);
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=0; i<range; i++) {
+            if (flags[i] != 1) {
+                nums[i] = num;
+                flags[i] = 1;
+                permutations(nums, num+1, range);
+                flags[i] = 0;
+            }
+        }
+    }
+
+    /**
+     * 全排列
+     * 以第一个元素与其他元素交换，abcd（a与bcd交换）-》bcd（b与cd交换）
+     * @param str 字符数组
+     * @param begin 起始位置
+     * @param end 数组的结束位置
+     */
+    private void permutationCore(char[] str, int begin, int end) {
+
+        if (begin > end) {
+            for(int i=0; i<str.length; i++) {
+                if (str[0] - '0' == 0 && i == 0) {
+                    continue;
+                }
+                System.out.print(str[i]);
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=begin; i<=end; i++) {
+            swap(str, begin, i);
+            permutationCore(str, begin+1, end);
+            swap(str, begin, i);
+
+        }
+    }
+    private void swap(char[] str, int i, int j) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+
 }
