@@ -43,10 +43,15 @@ import java.util.Map;
 public class Q638_ShoppingOffers {
 
     private int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
-        return shopping(price, special, needs);
+        // improve the recording method
+        Map<List<Integer>, Integer> record = new HashMap<>();
+        return shopping(price, special, needs, record);
     }
 
-    private int shopping(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+    private int shopping(List<Integer> price, List<List<Integer>> special, List<Integer> needs, Map<List<Integer>, Integer> record) {
+        if (record.containsKey(needs)) {
+            return record.get(needs);
+        }
         int res = dot(price, needs);
         int i = 0;
         for (List<Integer> s: special) {
@@ -61,9 +66,10 @@ public class Q638_ShoppingOffers {
                 clone.set(i, diff);
             }
             if (i == needs.size()) {
-                res = Math.min(res, s.get(i)+shopping(price, special, clone));
+                res = Math.min(res, s.get(i)+shopping(price, special, clone, record));
             }
         }
+        record.put(needs, res);
         return res;
     }
 
